@@ -1,0 +1,22 @@
+{
+  "name": "khareed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "10.15.1",
+    "npm": "6.4.1"
+  },
+  "scripts": {
+    "start" : "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/shaaandi/khareed.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
