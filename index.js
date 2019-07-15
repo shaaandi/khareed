@@ -1,13 +1,39 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
-const app = express();
 const cookieSession = require('cookie-session');
 const passport = require('passport');
-mongoose.connect(keys.mongoURI);
+const bodyParser = require('body-parser');
+
+mongoose.connect(keys.mongoURI, () => { }, { useNewUrlParser: true })
+    .then(() => {
+        console.log('MongoDB Atlas Server Connected')
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
+mongoose.connection.on("open", function(ref) {
+        console.log("Connected to mongo server.");
+});
+
+mongoose.connection.on("error", function(err) {
+    console.log("Could not connect to mongo server!");
+    return console.log(err);
+});
+
+const app = express();
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 
 
 require('./models/customer');
+require('./models/retailer');
+require('./models/product');
+require('./models/customerOrder');
+require('./models/retailerOrder');
+require('./models/service')
+require('./models/serviceOrder');
 require('./services/passport');
 
 
@@ -19,8 +45,19 @@ app.use(cookieSession({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.get('/', (req,res) => [
+    res.send('Hiii')
+])
+
+
 
 require('./routes/authRoutes')(app);
+require('./routes/retailerRoutes')(app);
+require('./routes/customerRoutes')(app);
+require('./routes/productRoutes')(app);
+require('./routes/orderRoutes')(app);
+require('./routes/testingRoutes')(app);
+require('./routes/serviceRoutes')(app);
 
 const PORT = process.env.PORT || 5000;
 
@@ -34,4 +71,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-app.listen(PORT, () => console.log('Server is listening '))
+app.listen(PORT, () => console.log(`Server is listening on ${PORT}`))
