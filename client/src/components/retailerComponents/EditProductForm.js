@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {addProduct} from '../../actions/retailerActions';
 
 class EditProductForm extends Component {
     constructor(props){
@@ -6,7 +9,7 @@ class EditProductForm extends Component {
         this.state = {
             editMode : false,
             title : '',
-            price : '0',
+            price : 0,
             description : '',
             quantity : '',
             brand : '',
@@ -15,39 +18,29 @@ class EditProductForm extends Component {
     }
 
     componentDidMount(){
-        if (this.props.user === 'retailer') {
-            let data = {}
-            data = this.props.retailer.inventory.filter((p) => {
-                if(p._id === this.props.id) return p
-            })
-            const {title,price,description,quantity,brand,imgSrc} = data[0]
-            this.setState({
-                title, 
-                price,
-                description,
-                quantity,
-                brand,
-                imgSrc
-            })
-        }
-       
-        
+        const {title,price,description,quantity,brand,imgSrc} = this.props.product
+        this.setState({
+            title, 
+            price,
+            description,
+            quantity,
+            brand,
+            imgSrc
+        }) 
     }
 
     handleSubmit = async (e) => {
-        
         e.preventDefault();
         let data = {...this.state, id: this.props.id}
-        await this.props.addProduct(data, '/api/retailer/inventory', 'PUT')
-        this.setState({ 
+        let product = await this.props.addProduct(data, '/api/retailer/inventory', 'PUT')
+        await this.setState({ 
             title : '',
             imgSrc : '',
-            price : '0',
+            price : 0,
             imgSrc : '',
             editMode : false
         })
-        this.props.refresh()
-        
+        await this.props.refresh(product)
     }
 
     handleChange = (e) => {
@@ -62,12 +55,6 @@ class EditProductForm extends Component {
         this.setState({
             editMode : !this.state.editMode
         })
-    }
-
-    handleDelete =  () => {
-        this.props.history.push('/retailer/products')
-        this.props.deleteProduct(this.props.id)
-        
     }
 
     render  ()  {
@@ -100,4 +87,4 @@ class EditProductForm extends Component {
 }
 
 
-export default EditProductForm
+export default connect(null, {addProduct})(withRouter(EditProductForm))

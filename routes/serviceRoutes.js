@@ -34,8 +34,20 @@ module.exports = (app) => {
     })
     app.get('/api/service/:mode/:id', async(req,res) => {
         if (req.params.mode === 'retailerOrders'){
-            let order = await RetailerOrder.findById(req.params.id).populate('customerOrderId').populate('products')
-            if (order) res.send(order)
+            let order = await RetailerOrder.findById(req.params.id).populate('customerOrderId').populate('products');
+            if (order) {
+                let allServices =await  Service.find({})
+                let services = await allServices.filter((s) => {
+                    if(s.id === req.user.id) return false;
+                    else return true;
+                })
+                if(services) res.send({
+                    order : order,
+                    services : services
+                })
+            }
+
+            
         }
         else if (req.params.mode === 'serviceOrders'){
             let order = await ServiceOrder.findById(req.params.id).populate('customerOrderId').populate('products')
@@ -53,7 +65,7 @@ module.exports = (app) => {
     if(req.params.mode === 'retailerOrders'){
         let retailerOrder = await RetailerOrder.findByIdAndUpdate(req.params.orderId, {status : 'Recieved'}, {new : true})
         .populate('customerOrderId')
-
+        // Products Sold counter will be incremented . 
         if (!req.body.forward){
             let customerOrder = await retailerOrder.customerOrderId; // customerOrder populated
             let retailerProducts = await retailerOrder.products.map(p => p.toString())

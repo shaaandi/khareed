@@ -1,7 +1,7 @@
 import React , {Component} from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import {connect} from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions/customerActions';
 import {withRouter} from 'react-router-dom';
 
 class Payment extends Component {
@@ -12,7 +12,7 @@ class Payment extends Component {
 
     onToken = async   (token) =>  {
         await this.props.handleToken(token,this.props.amount);
-        this.props.history.push('/customer/orders');
+        this.props.history.push('/customer/customerOrders');
     }
 
     render () {

@@ -1,23 +1,32 @@
 import React, {Component} from 'react';
-import * as actions from '../actions';
+import * as actions from '../../actions/serviceActions';
 import {connect} from 'react-redux';
-class RetailerOrder extends Component{
+import {withRouter} from 'react-router-dom';
+class ServiceRetailerOrder extends Component{
 
     constructor(props){
         super(props)
         this.state = {
+            order : null,
             editMode : true,
-            service : ''
+            service : '',
+            services : null
         }
     }
 
     async componentDidMount(){
-       await this.props.fetchRetailerOrder(this.props.id)
-       if(this.props.retailerOrder.order.serviceId) {
+       let response = await this.props.fetchServiceOrder(this.props.id, 'retailerOrders')
+       if(response){
            this.setState({
-               editMode : false
+                order : response.order,
+                services : response.services
            })
        }
+    }
+
+    addToCustomerOrders = async  () => {
+        this.props.history.push('/service/retailerOrders')
+        await this.props.serviceRetailerOrderConfirmation(this.state.order._id, false)
     }
 
     handleChange = (event) => {
@@ -26,15 +35,13 @@ class RetailerOrder extends Component{
 
     handleSubmit = async  (event) => {
         event.preventDefault();
-        await this.props.selectRetailerOrderService(this.props.retailerOrder.order._id,this.state.service)
-        this.setState({
-            editMode : false
-        })
-    }
-
+        this.props.history.push('/service/retailerOrders')
+        await this.props.serviceRetailerOrderConfirmation(this.state.order._id, true, {recieverId : this.state.service})
+        this.props.history.push('/service/serviceOrders')
+    }  
     renderForm = () => {
         if (this.state.editMode) {
-            let options = this.props.retailerOrder.services.map(service => {
+            let options = this.state.services.map(service => {
                 return (
                     <option value={service._id}>{service.address}</option>
                 )
@@ -50,7 +57,7 @@ class RetailerOrder extends Component{
                             {options}
                         </select>
                     </label>
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Forward" />
                 </form>
             )
         } else {
@@ -58,26 +65,29 @@ class RetailerOrder extends Component{
         }
     }
 
-    renderService =() => {
-        if (this.props.retailerOrder.order.serviceId) {
-            return (
-                <h3><span>Service Center : </span>{this.props.retailerOrder.order.serviceId.address}</h3>
+    renderOptions = () => {
+        if (this.state.order.status === 'Pending') {
+            return([
+                <button className='link' onClick={this.addToCustomerOrders}>Add to Customer Orders</button>,
+                <div>{this.renderForm()}</div>
+            ]
             )
         }
+        else return <div></div>
     }
 
 
     render() {
-        if (this.props.retailerOrder === null) return <div></div>
-        const products = this.props.retailerOrder.order.products.map(p => {
+        if (this.state.order === null) return <div>Wait ....</div>
+        const products = this.state.order.products.map(p => {
             return (
                 <div key={p._id} className='cartProduct'>
                     <img className='cartImage' src={p.imgSrc} alt="Image of Product"/>
                     <div className='cartProductInformation'>
                         <h3 className='cartText'>{p.title}</h3>
                         <h3 className='cartText'>Price: ${p.price}</h3>
-                        <h3 className='cartText'>Quantity : {this.props.retailerOrder.order.productsQuantity[p._id]}</h3>
-                        <h3 className='cartText'>Total : ${p.price*this.props.retailerOrder.order.productsQuantity[p._id]}</h3>
+                        <h3 className='cartText'>Quantity : {this.state.order.productsQuantity[p._id]}</h3>
+                        <h3 className='cartText'>Total : ${p.price*this.state.order.productsQuantity[p._id]}</h3>
                         <button className='cartButton' onClick={() => this.props.history.push(`/products/${p._id}`)}>View Product</button>
                     </div>
                 </div>
@@ -88,13 +98,13 @@ class RetailerOrder extends Component{
         return (
             <div id='order'>
                 <div className='header'>
-                    <h3><span>Order id : </span>{this.props.retailerOrder.order._id}</h3>
-                    <h3><span>Total Amount : </span>${this.props.retailerOrder.order.tAmount}</h3>
-                    <h3><span>Status : </span>{this.props.retailerOrder.order.status}</h3>
+                    <h3><span>Order id : </span>{this.state.order._id}</h3>
+                    <h3><span>Total Amount : </span>${this.state.order.tAmount}</h3>
+                    <h3><span>Status : </span>{this.state.order.status}</h3>
                     <h3><span>Issued : </span>a week ago</h3>
-                    {this.renderService()}
+                    <h3><span>Customer Address : </span>{this.state.order.customerOrderId.shippingAddress}</h3>
+                    {this.renderOptions()}
                 </div>
-                {this.renderForm()} 
                 <div className='cartProducts'>
                      <span className='headings'>Products</span>
                     {products}
@@ -105,8 +115,8 @@ class RetailerOrder extends Component{
 
 }
 
-const mapStateToProps = (state) => (
-    {retailerOrder : state.retailerOrder}
-)
+const mapStateToProps = (state) => ({
+    otherServices : state.service.otherServices
+})
 
-export default connect(mapStateToProps,actions)(RetailerOrder)
+export default connect(mapStateToProps,actions)(withRouter(ServiceRetailerOrder));

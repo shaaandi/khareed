@@ -1,8 +1,6 @@
 import React , {Component} from 'react';
 import {connect} from 'react-redux';
-import {addProduct} from '../actions';
-
-
+import {addProduct} from '../../actions/retailerActions';
 
 class NewProductForm extends Component {
 
@@ -10,7 +8,7 @@ class NewProductForm extends Component {
         super(props)
         this.state = {
             title : '',
-            price : '0',
+            price : 0,
             description : '',
             quantity : '',
             brand : '',
@@ -23,11 +21,11 @@ class NewProductForm extends Component {
     handleSubmit = async (e) => {
         
         e.preventDefault();
-        let data = {...this.state, id: this.props.ID}
-        await this.props.addProduct(data, this.props.URL, this.props.METHOD)
+        let data = {...this.state}
+        await this.props.addProduct(data, '/api/retailer/inventory', 'POST')
         this.setState({ 
             title : '',
-            price : '0',
+            price : 0,
             description : '',
             quantity : '',
             brand : '',
@@ -67,7 +65,7 @@ class NewProductForm extends Component {
                 <label >Brand
                     <input type="text" name='brand'  onChange={this.handleChange}/>
                 </label>
-                <button>{this.props.submitText}</button>
+                <button>Submit</button>
             </form>
         )
     }

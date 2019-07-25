@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {updateRetailer} from '../../actions/retailerActions';
 
-class CustomerProfile extends Component {
+
+class RetailerProfile extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -12,15 +15,15 @@ class CustomerProfile extends Component {
 
     componentDidMount(){
         this.setState({
-            name : this.props.customer.name,
-            address : this.props.customer.address,
+            name : this.props.retailer.name,
+            address : this.props.retailer.address,
             profileEditMode : false
         })
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.updateCustomer(this.state)
+        this.props.updateRetailer(this.state)
         this.setState({
             name : '',
             address : '',
@@ -42,7 +45,7 @@ class CustomerProfile extends Component {
 
     renderContent = () => {
         return (this.state.profileEditMode) ? (
-            <form onSubmit={this.handleSubmit}>
+            [<form onSubmit={this.handleSubmit}>
                 <label>Name :
                 <input type="text" name='name' value={this.state.name} onChange={this.handleChange}/>
                 </label>
@@ -50,13 +53,15 @@ class CustomerProfile extends Component {
                 <input type="text" name='address' value={this.state.address} onChange={this.handleChange}/>
                 </label>
                 <button>Update</button>
-            </form>
+            </form>,
+            <button onClick={this.handleClick}>Back</button>]
         ) : (
             
             <div>
-                <li>Name : {this.props.customer.name}</li>
-                <li>Badge : {this.props.customer.badge}</li>
-                <li>Address : {this.props.customer.address || ''}</li>
+                <li>Name : {this.props.retailer.name}</li>
+                <li>Badge : {this.props.retailer.badge}</li>
+                <li>Address : {this.props.retailer.address || ''}</li>
+                <button onClick={this.handleClick}>Edit Profile</button>
             </div>
         )
     }
@@ -66,13 +71,15 @@ class CustomerProfile extends Component {
             <div className='retailerProfile'>
                 <img src="https://static.thenounproject.com/png/9355-200.png" alt="Profile Image"/>
                     {this.renderContent()}
-                <button onClick={this.handleClick}>Edit Profile</button>
+                
             </div>    
         )
     }
     
 } 
     
-
+const mapStateToProps = (store) => ({
+    retailer : store.retailer.profile
+})
     
-export default CustomerProfile;
+export default connect(mapStateToProps,{updateRetailer})(RetailerProfile);

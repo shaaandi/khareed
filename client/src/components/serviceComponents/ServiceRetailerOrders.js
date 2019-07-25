@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link, Route, withRouter} from 'react-router-dom';
-import * as actions from '../actions';
+import {Route, withRouter} from 'react-router-dom';
+import {fetchServiceOrders} from '../../actions/serviceActions';
 import ServiceRetailerOrder from './ServiceRetailerOrder';
 class ServiceRetailerOrders extends Component {
 
@@ -85,4 +85,4 @@ const mapStateToProps = (store) => ({
     service : store.service,
     orders : store.service.retailerOrders
 })
-export default connect(mapStateToProps,actions)(withRouter(ServiceRetailerOrders));
+export default connect(mapStateToProps,{fetchServiceOrders})(withRouter(ServiceRetailerOrders));

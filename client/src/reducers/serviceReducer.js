@@ -3,14 +3,13 @@ const initialState = {
     profile : null,
     customerOrders : null,
     retailerOrders : null,
-    serviceOrders : null,
-    otherServices : null
+    serviceOrders : null
 }
 
 export default function (state=initialState, action) {
     switch(action.type) {
         case LOAD_SERVICE:
-            return {...state, profile : action.payload.profile,otherServices : action.payload.otherServices };
+            return {...state, profile : action.payload.profile };
         case UPDATE_SERVICE:
             return {...state, profile : action.payload};
         case FETCH_SERVICE_RETAILER_ORDERS:

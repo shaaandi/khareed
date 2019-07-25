@@ -1,11 +1,11 @@
 import React , {Component} from 'react';
 import  {connect} from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions/customerActions';
 import {Route, Link, withRouter} from 'react-router-dom';
-import CustomerProfile from './customerProfile';
-import Products from './Products';
+import CustomerProfile from './CustomerProfile';
+import CustomerCart from './CustomerCart';
 import CustomerOrders from './CustomerOrders';
-import CustomerOrder from './CustomerOrder';
+import CustomerWishList from './CustomerWishList';
 
 class RetailerDashboard extends Component{
 
@@ -26,42 +26,29 @@ class RetailerDashboard extends Component{
                     <Link className='link' to="/customer/profile">Profile</Link>
                     <Link className='link' to="/customer/wishlist">Wishlist</Link>
                     <Link className='link' to='/customer/cart'>Cart</Link>
-                    <Link className="link" to='/customer/orders'>Orders</Link>
+                    <Link className="link" to='/customer/customerOrders'>Orders</Link>
                 </div>
                 <div className='retailerContent'>
                 <Route exact path="/customer/profile" render = {() => {
                     return (
-                        <CustomerProfile updateCustomer= {this.props.updateCustomer} customer={this.props.customer}/>
+                        <CustomerProfile/>
                     )
                 }} />
                 <Route exact path="/customer/wishlist" render = {() => {
                     return (
-                        <Products products={this.props.customer.wishList} remover={this.props.removeProductFromWishlist}/>
+                        <CustomerWishList />
                     )
                 }} />
                 <Route exact path="/customer/cart" render = {() => {
                     return (
-                        <Products products={this.props.customer.cart} remover={this.props.removeProductFromCart} 
-                        cartQuantity={this.props.customer.cartQuantity} 
-                        cartQuantitySetter={this.props.cartQuantitySetter}/>
+                        <CustomerCart />
                     )
                 }} />
-                <Route exact path="/customer/orders" render = {() => {
+                <Route path="/customer/customerOrders" render = {() => {
                     return (
-                        <CustomerOrders orders={this.props.customer.customerOrders} history={this.props.history}/>
+                        <CustomerOrders />
                     )
                 }} />
-                <Route path="/customer/orders/:id"
-                render= { ({match}) => {
-                    let order = this.props.customer.customerOrders.filter(order => {
-                        if(order._id === match.params.id) return order;
-                        else return ;
-                    })
-                    return (
-                        <CustomerOrder id={match.params.id} order={order[0]} history={this.props.history}/>
-                    )
-                }}
-                />
 
                 </div>            
             </div>

@@ -56,7 +56,7 @@ require('./routes/retailerRoutes')(app);
 require('./routes/customerRoutes')(app);
 require('./routes/productRoutes')(app);
 require('./routes/orderRoutes')(app);
-require('./routes/testingRoutes')(app);
+require('./routes/seedDataRoutes')(app);
 require('./routes/serviceRoutes')(app);
 
 const PORT = process.env.PORT || 5000;

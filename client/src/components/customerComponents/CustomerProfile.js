@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import * as actions from '../../actions/customerActions';
+import {connect} from 'react-redux';
 
-class RetailerProfile extends Component {
+class CustomerProfile extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -12,15 +14,15 @@ class RetailerProfile extends Component {
 
     componentDidMount(){
         this.setState({
-            name : this.props.retailer.name,
-            address : this.props.retailer.address,
+            name : this.props.profile.name,
+            address : this.props.profile.address,
             profileEditMode : false
         })
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.updateRetailer(this.state)
+        this.props.updateCustomer(this.state)
         this.setState({
             name : '',
             address : '',
@@ -54,9 +56,9 @@ class RetailerProfile extends Component {
         ) : (
             
             <div>
-                <li>Name : {this.props.retailer.name}</li>
-                <li>Badge : {this.props.retailer.badge}</li>
-                <li>Address : {this.props.retailer.address || ''}</li>
+                <li>Name : {this.props.profile.name}</li>
+                <li>Badge : {this.props.profile.badge}</li>
+                <li>Address : {this.props.profile.address || ''}</li>
             </div>
         )
     }
@@ -73,6 +75,8 @@ class RetailerProfile extends Component {
     
 } 
     
-
+const mapStoreToProps = (store) => ({
+    profile : store.customer.profile
+})
     
-export default RetailerProfile;
+export default connect(mapStoreToProps, actions)(CustomerProfile)

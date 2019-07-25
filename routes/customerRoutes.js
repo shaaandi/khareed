@@ -2,14 +2,23 @@ const mongoose = require('mongoose');
 const Customer = mongoose.model('customers');
 const CustomerOrder = mongoose.model('customerOrders');
 module.exports = (app) => {
-    app.get('/api/customer', (req,res) => {
+    app.get('/api/customer',async  (req,res) => {
         if(!req.user) res.send(false);
+        let customer = await Customer.findById(req.user.id);
+        res.send(customer)
+    })
 
-        Customer.findById(req.user.id).populate('wishList').populate('cart').populate('customerOrders').exec((err,customer) => {
-            if(err) res.send(err);
-            res.send(customer)
-        })
+    app.get('/api/customer/:section',async (req,res) => {
+        let customer = await Customer.findById(req.user.id).populate(`${req.params.section}`)
 
+        if(req.params.section === 'cart'){
+            res.send({
+                products : customer[`${req.params.section}`],
+                cartQuantity : req.user.cartQuantity
+            })
+        } else {
+            res.send(customer[`${req.params.section}`])
+        }
     })
 
     app.post('/api/customer', (req,res) => {
@@ -59,13 +68,13 @@ module.exports = (app) => {
         
         if(!found) {
             await req.user.cart.push(req.body.id)
-            req.user.cartQuantity.set(req.body.id,1)
+            req.user.cartQuantity.set(req.body.id,req.body.quantity || 1)
             await req.user.save()
             res.send('Successful')
         }
         
         else {
-            let num  = req.user.cartQuantity.get(req.body.id) +1
+            let num  = req.user.cartQuantity.get(req.body.id) + (req.body.quantity || 1)
             req.user.cartQuantity.set(req.body.id,num)
             await req.user.save()
             res.send('Already listed')

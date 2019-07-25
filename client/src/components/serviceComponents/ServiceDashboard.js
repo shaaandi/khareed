@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link, Route} from 'react-router-dom';
-import * as actions from '../actions';
-import ServiceProfile from './serviceProfile';
+import {fetchService, updateService} from '../../actions/serviceActions';
+import ServiceProfile from './ServiceProfile';
 import ServiceRetailerOrders from './ServiceRetailerOrders';
 import ServiceCustomerOrders from './ServiceCustomerOrders';
 import ServiceServiceOrders from './ServiceServiceOrders';
@@ -63,4 +63,4 @@ const mapStateToProps = (store) => ({
     service : store.service
 })
 
-export default connect(mapStateToProps, actions)(ServiceDashboard)
+export default connect(mapStateToProps, {fetchService, updateService})(ServiceDashboard)

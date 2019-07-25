@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link, Route, withRouter} from 'react-router-dom';
-import * as actions from '../actions';
+import {Route, withRouter} from 'react-router-dom';
+import * as actions from '../../actions/serviceActions';
 import ServiceServiceOrder from './ServiceServiceOrder';
 class ServiceServiceOrders extends Component {
 

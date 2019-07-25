@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link, Route, withRouter} from 'react-router-dom';
-import * as actions from '../actions';
+import {Route, withRouter} from 'react-router-dom';
+import * as actions from '../../actions/serviceActions';
 import ServiceCustomerOrder from './ServiceCustomerOrder';
 class ServiceCustomerOrders extends Component {
 
@@ -55,17 +55,16 @@ class ServiceCustomerOrders extends Component {
             exact path='/service/customerOrders'
             render = {() => {
                 return(
-                    <div className='serviceSubSection'>
-                        <div className='serviceNav'>
+                       [<div className='serviceNav'>
                             <button className='link' onClick={() => this.switchOrders('Processed')}>Processed</button>
                             <button className='link' onClick={() => this.switchOrders('At Service')}>At Service</button>
                             <button className='link' onClick={() => this.switchOrders('Delivering')}>Delivering</button>
                             <button className='link' onClick={() => this.switchOrders('Delivered')}>Delivered</button>
-                        </div>
+                        </div>,
                         <div className='orders'>
                             {orders}
                         </div>
-                    </div>
+                       ]
                 )
             }}
             />,

@@ -1,20 +1,18 @@
 import React, {Component} from 'react';
-import * as actions from '../actions';
+import * as actions from '../../actions/serviceActions';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-class ServiceRetailerOrder extends Component{
+class ServiceServiceOrder extends Component{
 
     constructor(props){
         super(props)
         this.state = {
-            order : null,
-            editMode : true,
-            service : ''
+            order : null
         }
     }
 
     async componentDidMount(){
-       let order = await this.props.fetchServiceOrder(this.props.id, 'retailerOrders')
+       let order = await this.props.fetchServiceOrder(this.props.id, 'serviceOrders')
        console.log(order)
        if(order){
            this.setState({
@@ -24,51 +22,14 @@ class ServiceRetailerOrder extends Component{
     }
 
     addToCustomerOrders = async  () => {
-        this.props.history.push('/service/retailerOrders')
-        await this.props.serviceRetailerOrderConfirmation(this.state.order._id, false)
-    }
-
-    handleChange = (event) => {
-        this.setState({service: event.target.value});
-    }
-
-    handleSubmit = async  (event) => {
-        event.preventDefault();
-        this.props.history.push('/service/retailerOrders')
-        await this.props.serviceRetailerOrderConfirmation(this.state.order._id, true, {recieverId : this.state.service})
         this.props.history.push('/service/serviceOrders')
-    }  
-    renderForm = () => {
-        if (this.state.editMode) {
-            let options = this.props.otherServices.map(service => {
-                return (
-                    <option value={service._id}>{service.address}</option>
-                )
-            })
-            return (
-                <form id='serviceChooseForm' onSubmit={this.handleSubmit}>
-                    <label>
-                        <span>
-                        Choose your preferred Service Center
-                        </span>
-                        <select value={this.state.service} onChange={this.handleChange}>
-                            <option value={''}>Choose your preferred Service Center</option>
-                            {options}
-                        </select>
-                    </label>
-                <input type="submit" value="Forward" />
-                </form>
-            )
-        } else {
-            return <div></div>
-        }
+        await this.props.serviceServiceOrderConfirmation(this.state.order._id, false)
     }
-
+ 
     renderOptions = () => {
         if (this.state.order.status === 'Pending') {
             return([
-                <button className='link' onClick={this.addToCustomerOrders}>Add to Customer Orders</button>,
-                <div>{this.renderForm()}</div>
+                <button className='link' onClick={this.addToCustomerOrders}>Add to Customer Orders</button>
             ]
             )
         }
@@ -78,6 +39,7 @@ class ServiceRetailerOrder extends Component{
 
     render() {
         if (this.state.order === null) return <div>Wait ....</div>
+        console.log(this.state)
         const products = this.state.order.products.map(p => {
             return (
                 <div key={p._id} className='cartProduct'>
@@ -111,11 +73,6 @@ class ServiceRetailerOrder extends Component{
             </div>
         )
     }
-
 }
 
-const mapStateToProps = (state) => ({
-    otherServices : state.service.otherServices
-})
-
-export default connect(mapStateToProps,actions)(withRouter(ServiceRetailerOrder));
+export default connect(null,actions)(withRouter(ServiceServiceOrder));

@@ -32,7 +32,7 @@ module.exports = (app) => {
             retailers : [],
             products : req.user.cart,
             productsQuantity : customer.cartQuantity,
-            tAmount : req.user.address,
+            tAmount : req.body.amount,
             shippingAddress : req.body.shippingAddress,
             productsStatus : customerOrdersProductsStatus
 

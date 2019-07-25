@@ -4,16 +4,14 @@ import retailerReducer from './retailerReducer';
 import customerReducer from './customerReducer';
 import productReducer from './productReducer';
 import flashReducer from './flashReducer';
-import customerOrderReducer from './customerOrderReducer';
 import serviceReducer from './serviceReducer';
-import retailerOrderReducer from './retailerOrderReducer';
+import searchReducer from './searchReducer';
 export default combineReducers({
     auth : authReducer,
     retailer : retailerReducer,
     customer : customerReducer,
     products : productReducer,
     flash : flashReducer,
-    customerOrder : customerOrderReducer,
     service : serviceReducer,
-    retailerOrder : retailerOrderReducer
+    search : searchReducer
 });

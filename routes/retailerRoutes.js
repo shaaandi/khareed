@@ -8,15 +8,9 @@ module.exports = (app) => {
     // middlewares will be applied to app.all
 
     app.get('/api/retailer',async(req,res) => {
-        if(!req.user) res.send(false)
-        // limited population of top products 
-        Retailer.findById(req.user.id)
-        .populate('inventory')
-        .populate('retailerOrders')
-        .exec((err,user) => {
-            if (err) return err;
-            res.send(user);
-        });
+        if(!req.user) res.send(false) 
+        let retailer = await Retailer.findById(req.user.id)
+        res.send(retailer)
     });
 
     app.post('/api/retailer', async(req,res) => {
@@ -31,9 +25,13 @@ module.exports = (app) => {
         });
     })
 
-    app.get('/api/retailer/inventory', async(req,res) => {
-        // more products are given
-        let user = await req.user.populate('inventory');
+    app.get('/api/retailer/products', async(req,res) => {
+        let user = await Retailer.findById(req.user.id).populate({
+            path : 'inventory',
+            options : {
+                limit : 15
+            }
+        })
         res.send(user.inventory);
     });
 
@@ -79,6 +77,10 @@ module.exports = (app) => {
         res.send('User deleted');
     })
 
+    app.get('/api/retailer/orders', async(req,res) => {
+        let retailer = await Retailer.findById(req.user.id).populate('retailerOrders')
+        res.send(retailer.retailerOrders)
+    })
     
     app.get('/api/retailer/order/:id',async (req,res) => {
         let order = await RetailerOrder.findById(req.params.id).populate('products').populate('serviceId')
@@ -98,8 +100,8 @@ module.exports = (app) => {
 
         if(updatedService){
             let updatedOrder = await RetailerOrder.findByIdAndUpdate(req.params.id,{serviceId :  req.body.serviceId, status : 'Pending'},{new : true})
-            let response = await RetailerOrder.findById(updatedOrder.id).populate('products').populate('serviceId')
-            res.send(response)
+            .populate('products').populate('serviceId');
+            res.send(updatedOrder)
         } 
     })
 }
