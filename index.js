@@ -45,9 +45,6 @@ app.use(cookieSession({
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.get('/', (req,res) => [
-    res.send('Hiii')
-])
 
 
 
@@ -63,7 +60,7 @@ const PORT = process.env.PORT || 5000;
 if(process.env.NODE_ENV) console.log(process.env.NODE_ENV);
 else console.log('Not in production');
 if (process.env.NODE_ENV === 'production') {
-    console.log('I am called')
+    console.log('I am called')  
     app.use(express.static('client/build'))
 
     const path = require('path');
