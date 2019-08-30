@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Geostar&display=swap');
+
 #root {
     
     display: flex;
@@ -75,38 +77,54 @@
 #header{
     
     display: flex;
-    flex-direction: column;
     background: #009688;
     padding : 5px;
-
-}
-
-#upper {
-    display: flex;
     justify-content: space-between;
-    
+
 }
 
+#header .right{
+    padding: 5px;
+    flex-basis: 20%;
+}
 
-#header #upper .left {
+#header  .left {
     display: flex;
+    padding: 5px;
+    flex-basis: 20%;
+    justify-content: flex-end;
 }
 
 
-#header #upper  a{
+#header  a{
     color: white;
     text-decoration: none;
 }
 
-#header #upper .link{
+#header  .link{
     margin: 7px;
+}
+
+#header .center{
+    display: flex;
+    padding: 5px;
+    flex-grow: 1;
+    flex-basis: 60%
+}
+
+.brandLogo{
+    font-family: 'Geostar', cursive;
+}
+
+#brandImg{
+    width: 100px;
 }
 
 .headerForm{
 
     display: flex;
     flex-direction: row;
-    /* flex-grow: 1; */
+    flex-grow: 1;
     margin: 0 auto;
     padding: 1px;
     justify-content: center;
@@ -114,34 +132,75 @@
 
 }
 
-#upper .headerForm #query{
+#search-dropDown{
+    background : whitesmoke;
+}
+
+#search-dropDown option:hover{
+    background: #f6a9347d;
+}
+
+.headerForm #query{
 
     flex-grow: 1;
     /* border-radius: 10px; */
 
 }
 
-#upper .headerForm   button{
+.headerForm   button{
     border-radius: 0;
     padding: 0 3px;
+    background : #f6a934;
 }
 
 
+#categoriesNav{
+    display: none;
+    background: #f6a934;
+    padding: 10px;
+    flex-direction: column;
+    position: absolute;
+    flex-grow: 1;
+    top: 50px;
+    border-bottom: solid;
+
+}
+
+
+#categoriesNav button{
+    margin: 0;
+    border: none;
+    background: none;
+    font-size: 14px;
+    padding: 5px 5px 0 5px;
+    border-bottom: solid .1px;
+}
+
+#categoriesNav button:hover{
+    background : #1233;
+}
+
+#categoriesNavWrapper {
+    display: flex;
+}
+
+#categoriesToggler{
+    border:none;
+    background: none;
+    font-size: 14px;
+    font-weight: 300;
+
+}
 /* **************************** */
 
 
 form {
-    
-    
     display: flex;
     flex-direction: column;
-
-
 }
 
 form label {
     padding: 10px
-
 }
 
 form button {

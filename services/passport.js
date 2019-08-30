@@ -37,12 +37,17 @@ passport.use(new GoogleStrategy({
     proxy : true
 },async  (accessToken, refreshToken, profile, done) => {
     if (mongoose.connection.readyState == 0) console.log('DB not connected');
+    // if its an returning user
+    // and its Customer 
     let existingUser = await Customer.findOne({googleId : profile.id})
     if (existingUser) return done(null, existingUser)
+    // or its Retailer
     let existingUser2 = await Retailer.findOne({googleId : profile.id})
     if (existingUser2) return done(null, existingUser2)
+    // or its Service Man 
     let existingUser3 = await Service.findOne({googleId : profile.id});
     if(existingUser3) return done(null,existingUser3)
+    // if the function reaches here , it means its a new user, so we will setup a signup status 
     done(null, {
         id : profile.id,
         badge : 'NOT_INITIALIZED',

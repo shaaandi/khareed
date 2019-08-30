@@ -87,8 +87,32 @@ class Product extends Component{
                     </form>
                 ])
             }
+            else if (this.props.user.badge === 'RETAILER'){
+                return (
+                    <div>
+                        You are not allowed to make Purchase on Retailer Account.
+                        You need to make a new Customer Account for Buying Access.
+                    </div>
+                )
+            }
+            else if (this.props.user.badge === 'SERVICE'){
+                return (
+                    <div>
+                        Services are not allowed to make Purchases.
+                    </div>
+                )
+            }
+            else if (this.props.user.badge === 'NOT_INITIALIZED'){
+                return ( 
+                    <Link to={`/user/initialize`}>Complete your login process first</Link>
+                )
+            }
         } else {
-            return <div></div>
+            return (
+                <div>
+                    <a href='/auth/google'>Login First to Buy</a>
+                </div>
+            )
         }
     }
 

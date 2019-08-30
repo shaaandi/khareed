@@ -4,16 +4,24 @@ const Product = mongoose.model('products');
 const RetailerOrder = mongoose.model('retailerOrders');
 const Service = mongoose.model('services')
 
+const authVerification = (req,res,next) => {
+    if(!req.user) return res.send(false)
+    if(req.user.badge === 'RETAILER') next();
+    else {
+        return res.send('Unauthorized')
+    }
+}
+
 module.exports = (app) => {
     // middlewares will be applied to app.all
 
-    app.get('/api/retailer',async(req,res) => {
+    app.get('/api/retailer', authVerification, async(req,res) => {
         if(!req.user) res.send(false) 
         let retailer = await Retailer.findById(req.user.id)
         res.send(retailer)
     });
 
-    app.post('/api/retailer', async(req,res) => {
+    app.post('/api/retailer', authVerification, async(req,res) => {
         const data = req.body;
         let options = {
             new : true
@@ -25,7 +33,7 @@ module.exports = (app) => {
         });
     })
 
-    app.get('/api/retailer/products', async(req,res) => {
+    app.get('/api/retailer/products', authVerification, async(req,res) => {
         let user = await Retailer.findById(req.user.id).populate({
             path : 'inventory',
             options : {
@@ -35,7 +43,7 @@ module.exports = (app) => {
         res.send(user.inventory);
     });
 
-    app.post('/api/retailer/inventory', async (req,res) => {
+    app.post('/api/retailer/inventory', authVerification,async (req,res) => {
         // adding a new product to inventory
         let data = req.body;
         data.retailer = req.user.id;
@@ -45,7 +53,7 @@ module.exports = (app) => {
         res.send(product);
     });
 
-    app.put('/api/retailer/inventory', async(req,res) => {
+    app.put('/api/retailer/inventory', authVerification, async(req,res) => {
         // editiing an existing product 
         let data = req.body;
         const {title, price, brand, description, imgSrc,quantity} = data
@@ -63,7 +71,7 @@ module.exports = (app) => {
 
     })
 
-    app.delete('/api/retailer/inventory', async(req,res) => {
+    app.delete('/api/retailer/inventory', authVerification, async(req,res) => {
         await Product.findByIdAndDelete(req.body.id);
         await req.user.inventory.filter(p => {
             if (p == req.body.id) {
@@ -77,12 +85,12 @@ module.exports = (app) => {
         res.send('User deleted');
     })
 
-    app.get('/api/retailer/orders', async(req,res) => {
+    app.get('/api/retailer/orders', authVerification, async(req,res) => {
         let retailer = await Retailer.findById(req.user.id).populate('retailerOrders')
         res.send(retailer.retailerOrders)
     })
     
-    app.get('/api/retailer/order/:id',async (req,res) => {
+    app.get('/api/retailer/order/:id', authVerification,async (req,res) => {
         let order = await RetailerOrder.findById(req.params.id).populate('products').populate('serviceId')
         let services = await Service.find({})
         let response = {
@@ -92,7 +100,7 @@ module.exports = (app) => {
         res.send(response) 
     })
 
-    app.put('/api/retailer/order/:id', async(req,res) => {
+    app.put('/api/retailer/order/:id', authVerification, async(req,res) => {
         let service = await Service.findById(req.body.serviceId)
         let serviceRetailerOrders = service.retailerOrders;
         serviceRetailerOrders.push(req.params.id)

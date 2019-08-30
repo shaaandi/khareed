@@ -3,8 +3,17 @@ const Service = mongoose.model('services');
 const RetailerOrder =  mongoose.model('retailerOrders');
 const CustomerOrder = mongoose.model('customerOrders');
 const ServiceOrder = mongoose.model('serviceOrders');
+
+const authVerification = (req,res,next) => {
+    if(!req.user) return res.send(false)
+    if(req.user.badge === 'SERVICE') next();
+    else {
+        return res.send('Unauthorized')
+    }
+}
+
 module.exports = (app) => {
-    app.get('/api/service',async (req,res) => {
+    app.get('/api/service', authVerification,async (req,res) => {
         let service = await Service.findById(req.user.id);
         let allServices = await Service.find({})
         let otherServices = await allServices.filter(service => {
@@ -16,7 +25,7 @@ module.exports = (app) => {
         })
     })
 
-    app.post('/api/service', async(req,res) => {
+    app.post('/api/service', authVerification,async(req,res) => {
         const data = req.body;
         let options = {
             new : true
@@ -25,14 +34,14 @@ module.exports = (app) => {
         res.send(user)
     })
 
-    app.get('/api/service/:mode', async(req,res) => {
+    app.get('/api/service/:mode', authVerification,async(req,res) => {
         const service = await Service.findById(req.user.id).populate(`${req.params.mode}`);
         if(service){
             let section = `${req.params.mode}`
             res.send(service[section])
         }
     })
-    app.get('/api/service/:mode/:id', async(req,res) => {
+    app.get('/api/service/:mode/:id', authVerification,async(req,res) => {
         if (req.params.mode === 'retailerOrders'){
             let order = await RetailerOrder.findById(req.params.id).populate('customerOrderId').populate('products');
             if (order) {
@@ -61,7 +70,7 @@ module.exports = (app) => {
         }
 
     })
-    app.post(`/api/service/:mode/:orderId`, async (req,res) => {
+    app.post(`/api/service/:mode/:orderId`, authVerification,async (req,res) => {
     if(req.params.mode === 'retailerOrders'){
         let retailerOrder = await RetailerOrder.findByIdAndUpdate(req.params.orderId, {status : 'Recieved'}, {new : true})
         .populate('customerOrderId')

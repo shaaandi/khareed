@@ -1,14 +1,22 @@
 const mongoose = require('mongoose');
 const Customer = mongoose.model('customers');
 const CustomerOrder = mongoose.model('customerOrders');
+
+const authVerification = (req,res,next) => {
+    if(!req.user) return res.send(false)
+    if(req.user.badge === 'CUSTOMER') next();
+    else {
+        return res.send('Unauthorized')
+    }
+}
 module.exports = (app) => {
-    app.get('/api/customer',async  (req,res) => {
-        if(!req.user) res.send(false);
+
+    app.get('/api/customer', authVerification,async  (req,res) => {
         let customer = await Customer.findById(req.user.id);
         res.send(customer)
     })
 
-    app.get('/api/customer/:section',async (req,res) => {
+    app.get('/api/customer/:section',authVerification ,async (req,res) => {
         let customer = await Customer.findById(req.user.id).populate(`${req.params.section}`)
 
         if(req.params.section === 'cart'){
@@ -21,13 +29,13 @@ module.exports = (app) => {
         }
     })
 
-    app.post('/api/customer', (req,res) => {
+    app.post('/api/customer', authVerification , (req,res) => {
         Customer.findByIdAndUpdate(req.user.id,req.body,{new : true}, (err,customer) => {
             res.send(customer)
         })
     })
 
-    app.post('/api/customer/wishlist',async(req,res) => {
+    app.post('/api/customer/wishlist', authVerification ,async(req,res) => {
         let found = false;
         req.user.wishList.forEach((p) => {
             if (p == req.body.id) found=true
@@ -47,7 +55,7 @@ module.exports = (app) => {
 
     })
 
-    app.delete('/api/customer/wishlist', async (req,res) => {
+    app.delete('/api/customer/wishlist', authVerification ,async (req,res) => {
         let wishList = await req.user.wishList.filter((p) => {
             if (p == req.body.id) {
                 return;
@@ -85,7 +93,7 @@ module.exports = (app) => {
     })
 
 
-    app.put('/api/customer/cart', async (req,res) => {
+    app.put('/api/customer/cart', authVerification ,async (req,res) => {
         let num = req.user.cartQuantity.get(req.body.id)
         if (req.body.mode === 'inc') {
             num++
@@ -98,7 +106,7 @@ module.exports = (app) => {
         
     })
 
-    app.delete('/api/customer/cart', async (req,res) => {
+    app.delete('/api/customer/cart', authVerification ,async (req,res) => {
         let cart = await req.user.cart.filter((p) => {
             if (p == req.body.id) {
                 return;
@@ -113,7 +121,7 @@ module.exports = (app) => {
         res.send(true)
     })
 
-    app.get('/api/customer/order/:id',async (req,res) => {
+    app.get('/api/customer/order/:id',authVerification ,async (req,res) => {
         CustomerOrder.findById(req.params.id)
         .populate('retailers')
         .populate('products')

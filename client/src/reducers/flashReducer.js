@@ -1,7 +1,7 @@
 import { FLASH, UNFLASH } from "../actions/constants";
 
 const initialState = {
-    loading : true
+    loading : true,
 }
 export default function (state=initialState, action) {
     switch(action.type){

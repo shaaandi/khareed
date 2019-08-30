@@ -21,9 +21,7 @@ module.exports = (app) => {
     })
 
     app.get('/api/currentUser', (req,res) => {
-
-        res.send(req.user)
-       
+        res.send(req.user)     
     })
 
     app.get('/api/logout', (req,res) => {
@@ -35,24 +33,42 @@ module.exports = (app) => {
         if (req.user.initialized) {
             return res.send('Already Initialized').status(404);
         }
+        let user;
         const badge = req.body.badge;
         if (badge === 'CUSTOMER') {
-            let user = await new Customer({googleId : req.user.id, badge: badge, initialized: true}).save()
-            req.logOut();
-            res.redirect('/'); 
+            user = await new Customer({googleId : req.user.id, badge: badge, initialized: true}).save()
+            if(user){
+                req.logOut();
+                req.login(user, function(err) {
+                    if (err) { return next(err); }
+                    return res.send(user)
+                });
+            }
         }
         else if (badge === 'RETAILER') {
-            let user = await new Retailer({googleId : req.user.id, badge: badge, initialized: true}).save()
-            req.logOut();
-            res.redirect('/');
+            user = await new Retailer({googleId : req.user.id, badge: badge, initialized: true}).save()
+            if(user){
+                req.logOut();
+                req.login(user, function(err) {
+                    if (err) { return next(err); }
+                    return res.send(user);
+                });
+
+            }
         }
         else if (badge === 'SERVICE') {
-            let user = await new Service({googleId: req.user.id, badge : badge, initialized : true}).save();
-            req.logOut();
-            res.redirect('/');
+            user = await new Service({googleId: req.user.id, badge : badge, initialized : true}).save();
+            if(user){
+                req.login(user, function(err) {
+                    if (err) { return next(err); }
+                    return res.send(user);
+                });
+            }
         }
 
     })
+
+
 
     
 }

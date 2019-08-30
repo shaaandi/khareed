@@ -28,9 +28,9 @@ export const setUserBadge = (badge, history) => async (dispatch) => {
     })
     await dispatch({
         type : FETCH_USER,
-        payload : false
+        payload : response.data
     })
-    history.push('/')
+    history.push(`/${response.data.badge.toLowerCase()}`)
 }
 
 

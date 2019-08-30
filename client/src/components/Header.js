@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux';
 import {searchProducts} from '../actions/searchActions';
 import {Link, withRouter} from 'react-router-dom';
-
 class Header extends Component {
 
     constructor(props){
@@ -15,25 +14,8 @@ class Header extends Component {
         }
     }
 
-    // componentDidMount(){
-    //     // /search/titleSearch/Shoes/
-    //     let route = this.props.history.location.pathname.slice(0,20);
-    //     if(route === '/search/titleSearch/') {
-    //         let end = (route[(route.length)-1] === '/') ? this.props.history.location.pathname.length-1 : this.props.history.location.pathname.length;
-    //         let title = this.props.history.location.pathname.slice(20,end)
-    //         this.setState({
-    //             form: {
-    //                 query : title,
-    //                 filter  : 'all',
-    //                 category : ''
-    //             }
-    //         })
-    //     }
-
-    // }
 
     handleChange = (e) => {
-        
         this.setState({
             ...this.state,
             form : {...this.state.form, [e.target.name]: e.target.value}
@@ -66,24 +48,18 @@ class Header extends Component {
                 forwardRoute
             }
         })
-        // await this.props.searchProducts(query,`?${urlString}`)
-        // this.props.history.replace({
-        //     pathname: `/search/titleSearch/${query}`,
-        //     search : `?${urlString}`
-        // })
-        // this.props.history.push(`/search/titleSearch/${query}?${urlString}`)
     }
 
+
     renderForm() {
-        
         return(
             <form className='headerForm' onSubmit={this.handleSubmit}>
-                <select onChange={this.handleChange} 
+                <select id='search-dropDown' onChange={this.handleChange} 
                 name='category'
                 defaultValue=''
                 value={this.state.form.category}
                 >   
-                    <option value={``}>All Categories</option>
+                    <option value={``}>All</option>
                     <option value={`Automotive`}>Automotive</option>
                     <option value={`Baby`}>Baby</option>
                     <option value={`Home Improvement`}>Home Improvement</option>
@@ -97,9 +73,23 @@ class Header extends Component {
                 <input type='text' id='query' onChange={this.handleChange} 
                 name='query' value={this.state.form.query}
                 />
-                <button>Search</button>
+                <button >Search</button>
             </form>
         )
+    }
+
+    toCategoryPage = async (category) => {
+        let parse = category.split('&').join('%26');
+        let forwardRoute = {
+            pathname : `/shop/category/${parse}`,
+            search : ''
+        }
+        this.props.history.push({
+            pathname : `/empty`,
+            state : {
+                forwardRoute
+            }
+        })
     }
 
     renderContent() {
@@ -121,45 +111,59 @@ class Header extends Component {
         }
     }
 
-    // renderCustomerOptions = () => {
-    //     if(!this.props.auth) return;
-    //     if(this.props.auth.badge === 'CUSTOMER'){
-    //         return (
-    //             <Link className='link' to={'/customer/cart'}>
-    //             Cart : {this.props.auth.cart.length}
-    //             </Link>
-    //         )
-    //     }
-    // }
+    toggleCategoryNav = (val) => {
+        let nav = document.getElementById('categoriesNav');
+        nav.style.display = val
+        if(val === 'flex') document.getElementById('categoriesToggler').style.background = '#f6a934';
+        if(val === 'none') document.getElementById('categoriesToggler').style.background = 'none';
+    }
+
+    renderCategorySearch = () => {
+        return(
+                <div  id="categoriesNavWrapper" 
+                onMouseEnter={() => this.toggleCategoryNav('flex')}
+                onMouseOut={() => this.toggleCategoryNav('none')}
+                >
+                    <button id='categoriesToggler' >
+                       All Departments 
+                    </button>
+                    <div id='categoriesNav'   onMouseEnter={() => this.toggleCategoryNav('flex')}> 
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Automotive')}>Automotive</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Baby')}>Baby</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Home Improvement')}>Home Improvement</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Industrial Scientific')}>Industrial Scientific</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Lawn and Garden')}>Lawn and Garden</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Outdoor')}>Outdoor</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Pet Products')}>Pet Products</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Sports')}>Sports</button>
+                        <button onMouseEnter={() => this.toggleCategoryNav('flex')} onMouseLeave={() => this.toggleCategoryNav('flex')}  onClick={() => this.toCategoryPage('Toys')}>Toys</button>
+                    </div>
+                </div>
+        )
+    }
+
 
     render() {
-        
         return  (
             <nav id="header"> 
-                <div id='upper'>
                     <div className='right'>
-                        <Link className='link' to="/products">Khareed</Link>
+                        <Link to='/' className='brandLogo'>
+                            <img
+                            id='brandImg'
+                            src={require('../images/LogoNew.png')}
+                            />
+                        </Link>
                     </div>
+                    <div className='center'>
+                    {this.renderCategorySearch()}
                     {this.renderForm()}
+                    </div>
                 
                     <div className='left'>
-                        {/* {this.renderCustomerOptions()} */}
                         {this.renderContent()}
                     </div>  
-                </div>
-                <div id='lower'>
-                    <div className='right'>
-
-                    </div>
-                    <div className='right'>
-
-                    </div>
-                    <div className='right'>
-
-                    </div>
-                </div>
-
             </nav>
+            
         )
     }
 }

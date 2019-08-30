@@ -5,15 +5,19 @@ const Customer = mongoose.model('customers');
 const Retailer = mongoose.model('retailers');
 const RetailerOrder = mongoose.model('retailerOrders');
 const CustomerOrder = mongoose.model('customerOrders');
-const Product = mongoose.model('products')
 
-function compare(val1,val2) {
-    if(val1 === val2) return true;
-    else return false;
-}
+const authVerification = (req,res,next) => {
+    if(!req.user) return res.send(false)
+    if(req.user.badge === 'CUSTOMER') next();
+    else {
+        console.log('Unauthorized')
+        return res.send('Unauthorized')
+        
+    }
+} 
 
 module.exports = (app) => {
-    app.post('/api/customer/order', async (req,res) => {
+    app.post('/api/customer/order', authVerification, async (req,res) => {
 
         await stripe.charges.create({
             amount : req.body.amount,

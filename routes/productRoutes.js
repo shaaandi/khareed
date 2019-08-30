@@ -94,39 +94,6 @@ module.exports = (app) => {
             allResultsCount
         })
 
-        // let options = req.query
-        // let {category, filters, sort} = req.params;
-        // let strArray = await filters.split('&');
-        // let sortArray = await sort.split('&');
-        // let sortingField = (sortArray[0] === 'undefined') ? 'customer_average_review_rating' : sortArray[0]
-        // let sortOrder = (sortArray[1] === 'undefined') ? 'desc' : sortArray[1]
-        // let obj = {};
-        // //  getting sub categories
-        // let subCategories = await Product.find({category :category}).distinct('subCategory')
-        // let brands = await Product.find({category :category}).distinct('brand')
-        // // ******************
-        // let waiter = await strArray.map(filter => {
-        //     let temp = filter.split('=');
-        //     obj[`${temp[0]}`] = temp[1];
-        //     return filter;
-        // })
-        // if(waiter && subCategories && brands) {
-
-        //     let brand = (obj.brand === 'undefined') ? false : obj.brand
-        //     let minPrice = (obj.minPrice === 'undefined') ? false : obj.minPrice
-        //     let subCategory = (obj.subCategory === 'undefined') ? false : obj.subCategory
-        //     let maxPrice = (obj.maxPrice === 'undefined') ? false : obj.maxPrice
-        //     let products = await Product.find({
-        //         category : category,
-        //         subCategory : subCategory || {$nin: ['none']},
-        //         brand : brand || {$nin : ['none']},
-        //         price : {$gte : minPrice || 0, $lte : maxPrice || Infinity}
-        //     }).sort({[sortingField] : sortOrder}).skip(20*req.params.pageNum).limit(20)
-        //     res.send({
-        //         products : products,
-        //         subCategories : subCategories,
-        //         brands : brands
-        //     })
-        // }
+        
     })
 }

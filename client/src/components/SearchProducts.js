@@ -51,20 +51,6 @@ class SearchProducts extends Component {
         return;
     }
 
-    // async componentDidUpdate(){
-    //     let options = queryString.parse(this.props.history.location.search);
-    //     let {pageNum, sortOrder, sortField} = options;
-    //     await this.setState({
-    //         filters : {
-    //             ...options,
-    //             pageNum : (pageNum) ? pageNum : 1,
-    //             sortField : (sortField) ? sortField : 'customer-average-review-rating',
-    //             sortOrder : (sortOrder) ? sortOrder : 'desc'
-    //         }
-    //     })
-    //     return;
-    // }
-
     newRequest = async(resetPaging=true) => {
         let newUrlQuery = ``;
         let {categories,subCategories,brands, minPrice, maxPrice, minRating, pageNum, sortField, sortOrder} = this.state.filters;

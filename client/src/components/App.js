@@ -16,9 +16,9 @@ import RefreshRoute from './RefreshRoute';
 
 class App extends Component {
 
-    componentDidMount() {
-        this.props.fetchUser()
-
+    async componentDidMount() {
+        await this.props.fetchUser()
+        return;
     }
 
     flash = () => {
@@ -29,6 +29,8 @@ class App extends Component {
 
 
     render() {
+        
+         let user =  this.props.auth;
          return(
             <Router>   
                 <Header/>
@@ -40,16 +42,55 @@ class App extends Component {
                 )}
                 />
                 <Route exact path='/' component={()=><li>Landing Page</li>} />
-                {/* <Route  path='/products' component={Main} /> */}
-                <Route  path="/retailer" component={RetailerDashboard}/>
-                <Route  path='/customer' component={CustomerDashboard} />
-                <Route path='/service' component={ServiceDashboard} />
-                <Route path='/user/initialize' component={Initialize} />
+                <Route  path="/retailer" 
+                render={ () => {
+                    if(user){
+                        if(this.props.auth.badge === 'RETAILER') return (<RetailerDashboard />);
+                        else return  (<li>UnAuthorized</li>)
+                    } 
+                    else {
+                        return (<li>UnAuthenticated</li>)
+                    }
+
+                }}
+                />
+                <Route  path='/customer'
+                render={() => {
+                    if(user){
+                        if(user.badge === 'CUSTOMER') return(<CustomerDashboard />);
+                        else return (<li>UnAuthorized</li>)
+                    }
+                    else {
+                        return (<li>UnAuthenticated</li>)
+                    }
+                }}
+                />
+                <Route path='/service' 
+                render={() => {
+                    if(user){
+                        if(user.badge === 'SERVICE') return (<ServiceDashboard/>)
+                        else return (<li>UnAuthorized</li>)
+                    } 
+                    else {
+                        return <li>UnAuthenticated</li>
+                    }
+                }}
+                />
+                <Route path='/user/initialize'
+                render={() => {
+                    if(user){
+                        if(user.initialized) return <li>User already Initialized</li>
+                        else return <Initialize/>
+                    } else {
+                        return <li>UnAuthenticated</li>
+                    }
+                }}
+                />
                 <Route path='/shop' component={shoppingDashboard} />
                 <Route path='/search/titleSearch/:query' 
                 render={({match,location}) => {
                     let {query} = match.params;
-                    let options     = queryString.parse(location.search);
+                    let options = queryString.parse(location.search);
                     let urlQuery = location.search;
                     return(
                         <SearchProducts query={query}
@@ -59,6 +100,7 @@ class App extends Component {
                     )
                 }}
                 />
+                
             </Router>
             
         )
@@ -66,7 +108,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (store) => ({
-    flash : store.flash
+    flash : store.flash,
+    auth : store.auth
 })
 
 export default connect(mapStateToProps,actions)(App)
