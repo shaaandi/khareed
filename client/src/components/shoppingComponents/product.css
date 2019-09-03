@@ -1,0 +1,28 @@
+@media only screen and (max-width: 900px) {
+  .shopProduct {
+    flex-direction: column;
+    border-bottom: solid 0.3px grey;
+  }
+
+  .similarProducts .products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .similarProducts .similarProduct {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 23%;
+    padding: 8px;
+    margin: 5px;
+    border-bottom: 0.1px solid #009688;
+  }
+
+  .similarProductInformation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

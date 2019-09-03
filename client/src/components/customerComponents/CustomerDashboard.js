@@ -1,68 +1,84 @@
-import React , {Component} from 'react';
-import  {connect} from 'react-redux';
-import * as actions from '../../actions/customerActions';
-import {Route, Link, withRouter} from 'react-router-dom';
-import CustomerProfile from './CustomerProfile';
-import CustomerCart from './CustomerCart';
-import CustomerOrders from './CustomerOrders';
-import CustomerWishList from './CustomerWishList';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import * as actions from "../../actions/customerActions";
+import { Route, Link, withRouter } from "react-router-dom";
+import CustomerProfile from "./CustomerProfile";
+import CustomerCart from "./CustomerCart";
+import CustomerOrders from "./CustomerOrders";
+import CustomerWishList from "./CustomerWishList";
 
-class RetailerDashboard extends Component{
+class RetailerDashboard extends Component {
+  async componentWillMount() {
+    await this.props.fetchCustomer();
+    return;
+  }
 
-
-    componentWillMount(){
-         this.props.fetchCustomer()
+  render() {
+    if (this.props.customer === null) {
+      return <li>Loading</li>;
     }
-
-
-    render () {
-        if(this.props.customer === null) {
-            return (<li>Loading</li>)
-        }
-        return (
-            <div className='retailerMain'>
-                <div className='sideBar'> 
-                    <img className='img' src="https://www.irreverentgent.com/wp-content/uploads/2018/03/Awesome-Profile-Pictures-for-Guys-look-away2.jpg" alt="Profile" />
-                    <Link className='link' to="/customer/profile">Profile</Link>
-                    <Link className='link' to="/customer/wishlist">Wishlist</Link>
-                    <Link className='link' to='/customer/cart'>Cart</Link>
-                    <Link className="link" to='/customer/customerOrders'>Orders</Link>
-                </div>
-                <div className='retailerContent'>
-                <Route exact path="/customer/profile" render = {() => {
-                    return (
-                        <CustomerProfile/>
-                    )
-                }} />
-                <Route exact path="/customer/wishlist" render = {() => {
-                    return (
-                        <CustomerWishList />
-                    )
-                }} />
-                <Route exact path="/customer/cart" render = {() => {
-                    return (
-                        <CustomerCart />
-                    )
-                }} />
-                <Route path="/customer/customerOrders" render = {() => {
-                    return (
-                        <CustomerOrders />
-                    )
-                }} />
-
-                </div>            
-            </div>
-        )
-    }
+    return (
+      <div className="retailerMain">
+        <div className="sideBar">
+          <img
+            className="img"
+            src="https://www.irreverentgent.com/wp-content/uploads/2018/03/Awesome-Profile-Pictures-for-Guys-look-away2.jpg"
+            alt="Profile"
+          />
+          <Link className="link" to="/customer/profile">
+            Profile
+          </Link>
+          <Link className="link" to="/customer/wishlist">
+            Wishlist
+          </Link>
+          <Link className="link" to="/customer/cart">
+            Cart
+          </Link>
+          <Link className="link" to="/customer/customerOrders">
+            Orders
+          </Link>
+        </div>
+        <div className="retailerContent">
+          <Route
+            exact
+            path="/customer/profile"
+            render={() => {
+              return <CustomerProfile />;
+            }}
+          />
+          <Route
+            exact
+            path="/customer/wishlist"
+            render={() => {
+              return <CustomerWishList />;
+            }}
+          />
+          <Route
+            exact
+            path="/customer/cart"
+            render={() => {
+              return <CustomerCart />;
+            }}
+          />
+          <Route
+            path="/customer/customerOrders"
+            render={() => {
+              return <CustomerOrders />;
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
 }
 
-function mapStateToProps (store) {
-    return ({
-        customer : store.customer
-    })
+function mapStateToProps(store) {
+  return {
+    customer: store.customer
+  };
 }
 
-export default connect(mapStateToProps,actions)(withRouter(RetailerDashboard))
-
-
-
+export default connect(
+  mapStateToProps,
+  actions
+)(withRouter(RetailerDashboard));

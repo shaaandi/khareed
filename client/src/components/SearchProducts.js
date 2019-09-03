@@ -1,6 +1,7 @@
 import React ,{Component} from 'react';
 import {connect} from 'react-redux';
 import {Link, withRouter} from 'react-router-dom';
+import './searchProducts.css';
 import queryString from 'query-string';
 import * as actions from '../actions/searchActions';
 const initialState = {
@@ -86,8 +87,10 @@ class SearchProducts extends Component {
                 }
             })
         }
+        this.handleMobileFiltersToggle();
         await this.props.searchProducts(this.props.query, `?${newUrlQuery}`);
         await this.props.history.push(`/search/titleSearch/${this.props.query}/?${newUrlQuery}`);
+        
         return;
     }
 
@@ -295,6 +298,15 @@ class SearchProducts extends Component {
 
     }
 
+    handleMobileFiltersToggle = () => {
+        let searchFilters = document.getElementsByClassName('searchFilters')[0];
+        let searchProducts = document.getElementsByClassName('searchProducts')[0];
+        if (searchFilters.id !== "mobile-none") searchFilters.id = "mobile-none";
+        else searchFilters.id = "mobile-show";
+        if (searchProducts.id !== "mobile-none") searchProducts.id = "mobile-none";
+        else searchProducts.id = "mobile-show";
+    }
+
     render() {
         if(this.props.products === null) return <h2>Loading ... Searching</h2>
         let products = this.props.products.map(p => {
@@ -334,9 +346,12 @@ class SearchProducts extends Component {
                         </select>
                         <input type="submit" value='Sort'/>
                     </form>
+                    <button onClick={this.handleMobileFiltersToggle} id='titleSeachPage-filtersToggle'>
+                        <i class="fas fa-sliders-h"></i>
+                    </button>
                 </div>
                 <div className='titleSearchPageWrapper'>
-                    <div className='searchFilters'>
+                    <div id='mobile-none' className='searchFilters'>
                         {this.renderFilters()}
                     </div> 
                     <div className='searchProducts'>

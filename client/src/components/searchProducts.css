@@ -1,0 +1,17 @@
+#titleSeachPage-filtersToggle {
+  display: none;
+}
+
+@media only screen and (max-width: 900px) {
+  #mobile-flex-show {
+    display: flex;
+  }
+  .searchFilters {
+    position: absolute;
+    flex-direction: column;
+  }
+
+  #titleSeachPage-filtersToggle {
+    display: block;
+  }
+}

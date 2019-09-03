@@ -1,82 +1,104 @@
-import React, {Component} from 'react';
-import * as actions from '../../actions/customerActions';
-import {connect} from 'react-redux';
+import React, { Component } from "react";
+import * as actions from "../../actions/customerActions";
+import { connect } from "react-redux";
 
 class CustomerProfile extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            profileEditMode : false,
-            name : '',
-            address : ''
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      profileEditMode: false,
+      name: "",
+      address: ""
+    };
+  }
 
-    componentDidMount(){
-        this.setState({
-            name : this.props.profile.name,
-            address : this.props.profile.address,
-            profileEditMode : false
-        })
+  async componentDidMount() {
+    let { profile } = this.props;
+    if (profile !== null) {
+      this.setState({
+        name: profile.name,
+        address: profile.address,
+        profileEditMode: false
+      });
     }
+  }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.updateCustomer(this.state)
-        this.setState({
-            name : '',
-            address : '',
-            profileEditMode : false
-        })
-    }
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.updateCustomer(this.state);
+    this.setState({
+      name: "",
+      address: "",
+      profileEditMode: false
+    });
+  };
 
-    handleChange = (e) => {
-        this.setState({
-            [e.target.name] : e.target.value
-        })
-    }
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
-    handleClick = () => {
-        this.setState({
-            profileEditMode : !this.state.profileEditMode
-        })
-    }
+  handleClick = () => {
+    this.setState({
+      profileEditMode: !this.state.profileEditMode
+    });
+  };
 
-    renderContent = () => {
-        return (this.state.profileEditMode) ? (
-            <form onSubmit={this.handleSubmit}>
-                <label>Name :
-                <input type="text" name='name' value={this.state.name} onChange={this.handleChange}/>
-                </label>
-                <label >Address :
-                <input type="text" name='address' value={this.state.address} onChange={this.handleChange}/>
-                </label>
-                <button>Update</button>
-            </form>
-        ) : (
-            
-            <div>
-                <li>Name : {this.props.profile.name}</li>
-                <li>Badge : {this.props.profile.badge}</li>
-                <li>Address : {this.props.profile.address || ''}</li>
-            </div>
-        )
-    }
+  renderContent = () => {
+    return this.state.profileEditMode ? (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name :
+          <input
+            type="text"
+            name="name"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
+        </label>
+        <label>
+          Address :
+          <input
+            type="text"
+            name="address"
+            value={this.state.address}
+            onChange={this.handleChange}
+          />
+        </label>
+        <button>Update</button>
+      </form>
+    ) : (
+      <div>
+        <li>Name : {this.props.profile.name}</li>
+        <li>Badge : {this.props.profile.badge}</li>
+        <li>Address : {this.props.profile.address || ""}</li>
+      </div>
+    );
+  };
 
-    render () {
-        return (
-            <div className='retailerProfile'>
-                <img src="https://static.thenounproject.com/png/9355-200.png" alt="Profile Image"/>
-                    {this.renderContent()}
-                <button onClick={this.handleClick}>Edit Profile</button>
-            </div>    
-        )
+  render() {
+    if (this.props.profile === null) {
+      return <li>Loading</li>;
     }
-    
-} 
-    
-const mapStoreToProps = (store) => ({
-    profile : store.customer.profile
-})
-    
-export default connect(mapStoreToProps, actions)(CustomerProfile)
+    return (
+      <div className="retailerProfile">
+        <img
+          src="https://static.thenounproject.com/png/9355-200.png"
+          alt="Profile Image"
+        />
+        {this.renderContent()}
+        <button onClick={this.handleClick}>Edit Profile</button>
+      </div>
+    );
+  }
+}
+
+const mapStoreToProps = store => ({
+  profile: store.customer.profile
+});
+
+export default connect(
+  mapStoreToProps,
+  actions
+)(CustomerProfile);
