@@ -57,10 +57,16 @@
   outline: none;
   border-bottom: solid 1.2px black;
 }
+
+.retailerContent {
+  height: 86vh;
+  overflow-x: hidden;
+}
 @media only screen and (max-width: 900px) {
   .sideBar {
     display: none;
   }
+
   #retailerMobileDashboardNav {
     background: #009688;
     display: flex;
@@ -137,6 +143,10 @@
 
   #retailerAddNewProductMobileForm button {
     flex-basis: 100%;
+  }
+
+  #retailerAddNewProductMobileForm textarea {
+    border: solid 0.1px grey;
   }
   /* ********* */
 

@@ -1,3 +1,4 @@
+import "./customer.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../actions/customerActions";
@@ -36,6 +37,20 @@ class RetailerDashboard extends Component {
           </Link>
           <Link className="link" to="/customer/customerOrders">
             Orders
+          </Link>
+        </div>
+        <div id="customerMobileDashboardNav">
+          <Link className="link" to="/customer/profile">
+            <i class="fas fa-user-tie"></i>
+          </Link>
+          <Link className="link" to="/customer/wishlist">
+            <i class="fas fa-warehouse"></i>
+          </Link>
+          <Link className="link" to="/customer/cart">
+            <i class="fas fa-shopping-cart"></i>
+          </Link>
+          <Link className="link" to="/customer/customerOrders">
+            <i class="fas fa-money-bill-wave"></i>
           </Link>
         </div>
         <div className="retailerContent">

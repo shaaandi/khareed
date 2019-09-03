@@ -62,7 +62,7 @@ class NewProductForm extends Component {
             type="textarea"
             name="description"
             rows="5"
-            cols="40"
+            cols="35"
             onChange={this.handleChange}
           />
         </label>

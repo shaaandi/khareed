@@ -1,76 +1,95 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {withRouter, Link} from 'react-router-dom';
-import * as actions from '../../actions/customerActions';
-import Payment from './Payment';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter, Link } from "react-router-dom";
+import * as actions from "../../actions/customerActions";
+import Payment from "./Payment";
 
-class CustomerCart extends Component{
+class CustomerCart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cartQuantity: null
+    };
+  }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            cartQuantity  : null
-        }
-    }
+  async componentDidMount() {
+    await this.props.fetchCustomerSection("cart");
+  }
 
-    async componentDidMount(){
-        await this.props.fetchCustomerSection('cart');
-    }
+  render() {
+    if (
+      this.props.cart.products === null ||
+      this.props.cart.cartQuantity === null
+    )
+      return <h2>Loading</h2>;
 
-    render(){
-        if(this.props.cart.products === null || this.props.cart.cartQuantity === null) return <h2>Loading</h2>
+    const { products, cartQuantity } = this.props.cart;
+    let totalAmount = 0;
+    const quant = id => {
+      let num = cartQuantity[id];
+      return [
+        <h5 className="cartText">Quantity : {num}</h5>,
+        <button
+          className="cartProductIncrement cartButton"
+          onClick={() => this.props.cartQuantitySetter(id, "dec")}
+        >
+          -
+        </button>,
+        <button
+          className="cartProductDecrement cartButton"
+          onClick={() => this.props.cartQuantitySetter(id, "inc")}
+        >
+          +
+        </button>
+      ];
+    };
 
-        const {products, cartQuantity} = this.props.cart
-        let totalAmount = 0;
-        const quant = (id) => {
-            let num = cartQuantity[id]
-            return(
-                [
-                    <h5 className='cartText'>Quantity : {num}</h5>,
-                    <button className='cartProductIncrement cartButton' onClick={() => this.props.cartQuantitySetter(id,'dec')}>-</button>,
-                    <button className='cartProductDecrement cartButton' onClick={() => this.props.cartQuantitySetter(id,'inc')}>+</button>
-                ]
-            )
-        }
+    let Products = products.map(p => {
+      let numberOfProducts = cartQuantity[p._id];
+      totalAmount = totalAmount + parseInt(p.price) * numberOfProducts;
+      return (
+        <div key={p._id} className="cartProduct">
+          <img className="cartImage" src={p.imgSrc} alt="Image of Product" />
+          <div className="cartProductInformation">
+            <h3 className="cartText">{p.title}</h3>
+            <h4 className="cartText">Rs: {p.price}</h4>
+            {quant(p._id)}
+            <Link to={`/shop/products/${p._id}`} className="cartText">
+              View Product
+            </Link>
+            <button
+              className="cartProductRemove cartButton"
+              onClick={() => this.props.removeProductFromCart(p._id)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      );
+    });
 
-        let Products = products.map(p => {
-            let numberOfProducts = cartQuantity[p._id]
-            totalAmount = totalAmount + (parseInt(p.price)*numberOfProducts)
-            return  (
-                <div key={p._id} className='cartProduct'>
-                <img className='cartImage' src={p.imgSrc} alt="Image of Product"/>
-                <div className='cartProductInformation'>
-                    <h3 className='cartText'>{p.title}</h3>
-                    <h4 className='cartText'>Rs: {p.price}</h4>
-                    {quant(p._id)}
-                    <Link to={`/shop/products/${p._id}`} className='cartText'>View Product</Link>,
-                    <button  className='cartProductRemove cartButton' onClick={() => this.props.removeProductFromCart(p._id)}>X</button>
-                </div>
-                </div>
-            )
-        })
-        
-        return(
-            <div className='cart'>
-                <div className='cartHeader'>
-                    <h3>Cart</h3>
-                    <h4>Total Amount : Rs {totalAmount}/_</h4>
-                </div>
-                <div className='cartProducts'>
-                    {Products}
-                    <div className='cartBuyProduct'>
-                        <Payment amount={totalAmount*100}/>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
+    return (
+      <div className="cart">
+        <div className="cartHeader">
+          <h3>Cart</h3>
+          <h4>Total Amount : Rs {totalAmount}/_</h4>
+        </div>
+        <div className="cartProducts">
+          {Products}
+          <div className="cartBuyProduct">
+            <Payment amount={totalAmount * 100} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-const mapStoreToProps = (store) => ({
-    cart  : store.customer.cart
-})
+const mapStoreToProps = store => ({
+  cart: store.customer.cart
+});
 
-export default connect(mapStoreToProps, actions)(withRouter(CustomerCart));
-
+export default connect(
+  mapStoreToProps,
+  actions
+)(withRouter(CustomerCart));
