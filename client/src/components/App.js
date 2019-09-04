@@ -14,6 +14,7 @@ import Flash from "./Flash";
 import shoppingDashboard from "./shoppingComponents/shoppingDashboard";
 import queryString from "query-string";
 import RefreshRoute from "./RefreshRoute";
+import Landing from "./Landing";
 
 class App extends Component {
   async componentDidMount() {
@@ -32,7 +33,7 @@ class App extends Component {
         <Header />
         {this.flash()}
         <Route path="/empty" render={() => <RefreshRoute />} />
-        <Route exact path="/" component={() => <li>Landing Page</li>} />
+        <Route exact path="/" render={() => <Landing />} />
         <Route
           path="/retailer"
           render={() => {
