@@ -1,7 +1,7 @@
 import "./product.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { fetchProduct } from "../../actions/shoppingActions";
 import {
   addProductToCart,
@@ -32,6 +32,24 @@ class Product extends Component {
     });
     return;
   }
+
+  toAnotherProduct = async id => {
+    // let product = await this.props.fetchProduct(this.props.id);
+    // await this.setState({
+    //   product
+    // });
+    // let products = await this.props.fetchSimilarProducts(this.props.id);
+    // await this.setState({
+    //   similarProducts: products
+    // });
+    this.props.history.push(`/empty`, {
+      forwardRoute: {
+        pathname: `/shop/products/${id}`,
+        search: ""
+      }
+    });
+    return;
+  };
 
   handleChange = e => {
     let num = parseInt(e.target.value);
@@ -136,7 +154,9 @@ class Product extends Component {
           <div className="similarProductInformation">
             <h3>{p.title}</h3>
             <h4>Rs: {p.price}</h4>
-            <Link to={`/shop/products/${p._id}`}>View Product</Link>
+            <button onClick={() => this.toAnotherProduct(p._id)}>
+              View Product
+            </button>
           </div>
         </div>
       );
@@ -149,7 +169,7 @@ class Product extends Component {
 
   render() {
     const { product } = this.state;
-    if (product === null) return <h2>Loading ...</h2>;
+    if (product === null) return <div></div>;
     return [
       <div className="shopProduct">
         <div className="shopProductImage">
@@ -178,4 +198,4 @@ const mapStoreToProps = store => ({
 export default connect(
   mapStoreToProps,
   { fetchProduct, addProductToCart, addProductToWishlist, fetchSimilarProducts }
-)(Product);
+)(withRouter(Product));

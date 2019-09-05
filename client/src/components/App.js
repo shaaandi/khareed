@@ -33,7 +33,11 @@ class App extends Component {
         <Header />
         {this.flash()}
         <Route path="/empty" render={() => <RefreshRoute />} />
-        <Route exact path="/" render={() => <Landing />} />
+        <Route
+          exact
+          path="/"
+          render={() => <Landing user={this.props.auth} />}
+        />
         <Route
           path="/retailer"
           render={() => {
@@ -86,6 +90,7 @@ class App extends Component {
             let { query } = match.params;
             let options = queryString.parse(location.search);
             let urlQuery = location.search;
+            console.log({ match, location });
             return (
               <SearchProducts
                 query={query}

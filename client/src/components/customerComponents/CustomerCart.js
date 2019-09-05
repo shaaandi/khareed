@@ -21,7 +21,7 @@ class CustomerCart extends Component {
       this.props.cart.products === null ||
       this.props.cart.cartQuantity === null
     )
-      return <h2>Loading</h2>;
+      return <div></div>;
 
     const { products, cartQuantity } = this.props.cart;
     let totalAmount = 0;

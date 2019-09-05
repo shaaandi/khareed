@@ -79,7 +79,7 @@ class CustomerProfile extends Component {
 
   render() {
     if (this.props.profile === null) {
-      return <li>Loading</li>;
+      return <div></div>;
     }
     return (
       <div className="retailerProfile">

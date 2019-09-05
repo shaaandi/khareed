@@ -16,7 +16,7 @@ class RetailerDashboard extends Component {
 
   render() {
     if (this.props.customer === null) {
-      return <li>Loading</li>;
+      return <div></div>;
     }
     return (
       <div className="retailerMain">

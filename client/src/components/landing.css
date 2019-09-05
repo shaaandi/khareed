@@ -16,7 +16,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  background: #009688e6;
+  background: #a3d9d4eb;
   margin: 20px;
 }
 
@@ -35,9 +35,48 @@
   padding: 10px;
 }
 
-#quickDisplay-deals {
-  flex-basis: 50%;
+#quickDisplay-userOptions {
+  flex-basis: 30%;
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+  /* background: #ffffff99; */
+}
+
+#userOptions-header {
+  font-size: x-large;
+  font-weight: bold;
+  text-align: center;
+}
+
+#userOptions-options {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#userOptions-options a {
+  flex-basis: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: xx-large;
+  transition: background 0.4s;
+}
+
+#userOptions-options a:hover {
+  background: #00968845;
+}
+#quickDisplay-deals {
+  flex-basis: 30%;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#quickDisplay-deals img {
+  width: 200px;
 }
 
 #quickDisplay-deals h3 {
@@ -45,7 +84,7 @@
 }
 
 #quickDisplay-categories {
-  flex-basis: 50%;
+  flex-basis: 30%;
   padding: 5px;
 }
 
@@ -87,10 +126,12 @@
 #jamboText #e {
   color: #858484;
 }
-
+#landing-header-wishing-brandLogo {
+  width: 200px;
+}
 @media only screen and (max-width: 900px) {
   #landing-header-display {
-    background: #009688db;
+    background: #a3d9d4eb;
   }
 
   #landing-header #jamboText {
@@ -108,5 +149,10 @@
 
   #quickDisplay-deals img {
     width: 200px;
+  }
+
+  #userOptions-options a {
+    padding: 10px;
+    flex-basis: 40%;
   }
 }

@@ -2,6 +2,27 @@
   display: none;
 }
 
+#productNotFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#productNotFound img {
+  width: 300px;
+}
+
+#productNotFound h3 {
+  font-size: xx-large;
+  font-weight: normal;
+}
+
+.searchFiltersSections .range {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 @media only screen and (max-width: 900px) {
   #mobile-flex-show {
     display: flex;
@@ -14,4 +35,96 @@
   #titleSeachPage-filtersToggle {
     display: block;
   }
+
+  .searchProducts {
+    justify-content: center;
+  }
+
+  .searchProducts .products {
+    flex-basis: 100%;
+    flex-grow: 1;
+  }
+}
+
+/* Old styling  ************* */
+.searchProducts {
+  display: flex;
+  flex-wrap: wrap;
+  /* flex-grow: 1;
+  justify-content: space-evenly; */
+  height: 86vh;
+  overflow-x: hidden;
+}
+
+.searchProducts .paging {
+  flex-basis: 100%;
+}
+
+.searchProducts .products {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: solid 0.1px #009688;
+  margin: 10px;
+  flex-basis: 20%;
+  justify-content: flex-end;
+}
+
+.searchProducts h3 {
+  font-weight: lighter;
+  font-size: medium;
+}
+
+.searchProducts .products img {
+  width: 200px;
+  max-height: 300px;
+}
+
+.titleSearchPage {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleSearchPageWrapper {
+  display: flex;
+}
+
+.searchFilters {
+  flex-basis: 20%;
+  padding: 5px;
+  flex-shrink: 0;
+  height: 86vh;
+  overflow-x: hidden;
+}
+
+.searchFiltersSections {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+.searchFiltersSections .filterOptions {
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+  max-height: calc(100vh - 9rem);
+  overflow-y: auto;
+}
+
+.searchFiltersSections .filterOptions label {
+  display: flex;
+  justify-content: space-between;
+  margin: 1px;
+  padding: 1px;
+  align-items: center;
+}
+.searchFiltersSections .filterTitle {
+  font-size: large;
+  font-weight: bold;
+}
+
+.titleSearchPageHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px;
+  align-items: center;
 }

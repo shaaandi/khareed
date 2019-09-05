@@ -37,6 +37,11 @@ class SearchProducts extends Component {
         }
     }
 
+    topFunction = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      }
+
     async componentDidMount(){
         await this.props.searchProducts(this.props.query, this.props.urlQuery)
         let {pageNum, sortField, sortOrder, categories} = this.props.filters;
@@ -90,7 +95,7 @@ class SearchProducts extends Component {
         this.handleMobileFiltersToggle();
         await this.props.searchProducts(this.props.query, `?${newUrlQuery}`);
         await this.props.history.push(`/search/titleSearch/${this.props.query}/?${newUrlQuery}`);
-        
+        this.topFunction()
         return;
     }
 
@@ -240,11 +245,11 @@ class SearchProducts extends Component {
                         {categoryOptions}
                     </div>
                 </div>,
-                <form onSubmit={(e) => {
+                <form className='searchFiltersSections' onSubmit={(e) => {
                     e.preventDefault();
                     this.newRequest()
                 }}>
-                    <label>
+                    <label className='range'>
                         Minimun Price : {(this.state.filters.minPrice) ? `$${this.state.filters.minPrice}` : `Not Set`}
                         <input type='range'
                         onChange={this.handlePriceChange}
@@ -254,7 +259,7 @@ class SearchProducts extends Component {
                         value={(this.state.filters.minPrice) ? this.state.filters.minPrice : undefined}
                         />
                     </label>
-                    <label>
+                    <label className='range'>
                         Maximum Price : {(this.state.filters.maxPrice) ? `$${this.state.filters.maxPrice}` : `Not Set`}
                         <input type='range'
                         onChange={this.handlePriceChange}
@@ -308,7 +313,16 @@ class SearchProducts extends Component {
     }
 
     render() {
-        if(this.props.products === null) return <h2>Loading ... Searching</h2>
+        if(this.props.products === null) return <div></div>
+        if (this.props.products.length < 1){
+            return (
+                <div id='productNotFound'>
+                    <h3>Currently , we dont have this Product</h3>
+                    <img src="https://cdn.pixabay.com/photo/2018/12/31/17/06/sorry-3905517_960_720.png" alt="Sorry"/>
+                </div>
+            )
+        }
+        console.log(this.state)
         let products = this.props.products.map(p => {
             return (
                     <div className='products'>
@@ -321,6 +335,7 @@ class SearchProducts extends Component {
                     </div>
             )
         })
+        
         let limitPerPage = 20;
         let {pageNum} = this.state.filters;
         let {totalResultCount} = this.props;
@@ -357,8 +372,14 @@ class SearchProducts extends Component {
                     <div className='searchProducts'>
                         {products}
                         <div className='paging'>
-                            
-                            <button onClick={() => this.handlePageTransition('prev')}>Prev</button>
+                        {pageNum < 2 ? (
+                            <button id="disabledButton">Prev</button>
+                            ) : (
+                            <button onClick={() => this.handlePageTransition("prev")}>
+                            Prev
+                            </button>
+                            )}
+                            {/* <button onClick={() => this.handlePageTransition('prev')}>Prev</button> */}
                             <button onClick={() => this.handlePageTransition('next')}>Next</button>
                             <select 
                             name="jumpNum"

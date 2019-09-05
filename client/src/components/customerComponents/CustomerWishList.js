@@ -31,14 +31,14 @@ class CustomerWishList extends Component {
   };
 
   render() {
-    if (!this.state.products) return <h3>Loading</h3>;
+    if (!this.state.products) return <div></div>;
     let products = this.state.products.map(p => {
       return (
-        <div key={p._id} className="customerWishListProducts-product">
+        <div key={p._id} className="customerWishList-products-product">
           <img src={p.imgSrc} alt="Image of Product" />
-          <div className="productInformation">
+          <div className="wishListProductDetails">
             <h3>{p.title}</h3>
-            <h4>Rs: {p.price}</h4>
+            <h3>Rs: {p.price}</h3>
             <Link to={`/products/${p._id}`}>View</Link>
             <button onClick={() => this.handleRemove(p._id)}>Remove</button>
           </div>
@@ -46,9 +46,9 @@ class CustomerWishList extends Component {
       );
     });
     return (
-      <div className="customerWishListProducts">
-        <h3 id="customerWishListProducts-header">Wish List</h3>
-        {products}
+      <div className="customerWishList">
+        <h3 id="customerWishList-header">Wish List</h3>
+        <div id="customerWishList-products">{products}</div>
       </div>
     );
   }

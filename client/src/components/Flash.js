@@ -1,11 +1,11 @@
-import React from 'react';
-
+import React from "react";
+import "./flash.css";
 const Flash = () => {
-    return (
-        <div id='flash'>
-            <h3>Loading ...</h3>
-        </div>
-    )
-}
+  return (
+    <div id="flash">
+      <i class="fas fa-spinner"></i>
+    </div>
+  );
+};
 
 export default Flash;
