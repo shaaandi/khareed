@@ -4,6 +4,8 @@ import {Link, withRouter} from 'react-router-dom';
 import './searchProducts.css';
 import queryString from 'query-string';
 import * as actions from '../actions/searchActions';
+
+let previousVal = 0;
 const initialState = {
     filters : {
         categories : null,
@@ -57,7 +59,7 @@ class SearchProducts extends Component {
         return;
     }
 
-    newRequest = async(resetPaging=true) => {
+    newRequest = async(resetPaging=true, handleMobileToggle=true) => {
         let newUrlQuery = ``;
         let {categories,subCategories,brands, minPrice, maxPrice, minRating, pageNum, sortField, sortOrder} = this.state.filters;
         if(categories){
@@ -92,7 +94,7 @@ class SearchProducts extends Component {
                 }
             })
         }
-        this.handleMobileFiltersToggle();
+        if(handleMobileToggle) this.handleMobileFiltersToggle();
         await this.props.searchProducts(this.props.query, `?${newUrlQuery}`);
         await this.props.history.push(`/search/titleSearch/${this.props.query}/?${newUrlQuery}`);
         this.topFunction()
@@ -179,7 +181,7 @@ class SearchProducts extends Component {
                 pageNum : pageNum
             }
         })
-        await this.newRequest(false);
+        await this.newRequest(false, false);
         return;
     }
 
@@ -276,10 +278,34 @@ class SearchProducts extends Component {
                 </form>,
                 <div className='searchFiltersSections'>
                     <h4>Minimum Rating : </h4>
-                    <button onClick={this.handleRatingFilter} value={4}>4+</button>
-                    <button onClick={this.handleRatingFilter} value={3}>3+</button>
-                    <button onClick={this.handleRatingFilter} value={2}>2+</button>
-                    <button onClick={this.handleRatingFilter} value={1}>1+</button>
+                    <button className='starsRating' onClick={this.handleRatingFilter} value={4}>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    </button>
+                    <button className='starsRating' onClick={this.handleRatingFilter} value={3}>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    </button>
+                    <button className='starsRating' onClick={this.handleRatingFilter} value={2}>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    </button>
+                    <button className='starsRating' onClick={this.handleRatingFilter} value={1}>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    </button>
                 </div>,
                 <div className='searchFiltersSections'>
                     <div className='filterTitle'>
@@ -311,6 +337,19 @@ class SearchProducts extends Component {
         if (searchProducts.id !== "mobile-none") searchProducts.id = "mobile-none";
         else searchProducts.id = "mobile-show";
     }
+
+    // handleMobileMainHeaderToggeling = (e) => {
+    //     let mainHeader = document.getElementById('mainNavBar');
+    //     let scrollTop = e.target.scrollTop || 0;
+    //     if (scrollTop >= previousVal) {
+    //         mainHeader.style.height = 0;
+    //     }
+    //     else {
+    //         mainHeader.style.height = 'flex';
+    //     }
+    //     previousVal = scrollTop
+
+    // }
 
     render() {
         if(this.props.products === null) return <div></div>
@@ -369,7 +408,7 @@ class SearchProducts extends Component {
                     <div id='mobile-none' className='searchFilters'>
                         {this.renderFilters()}
                     </div> 
-                    <div className='searchProducts'>
+                    <div className='searchProducts' onScroll={this.handleMobileMainHeaderToggeling}>
                         {products}
                         <div className='paging'>
                         {pageNum < 2 ? (

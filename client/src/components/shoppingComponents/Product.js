@@ -67,7 +67,13 @@ class Product extends Component {
             className="shopProductButton"
             onClick={() => this.props.addProductToWishlist(this.props.id)}
           >
-            Add to Wishlist
+            <span className="shopProductButton-text">Add to WishList</span>
+            <span className="shopProductButton-icon">
+              <img
+                src="https://cdn.pixabay.com/photo/2017/11/24/18/27/christmas-2975401_960_720.png"
+                alt="+"
+              />
+            </span>
           </button>,
           <form
             className="shopProductCartForm"
@@ -80,11 +86,10 @@ class Product extends Component {
             }}
           >
             <div className="setters">
-              <input
+              <button
                 className="crements"
-                type="button"
-                value="-"
-                onClick={() => {
+                onClick={e => {
+                  e.preventDefault();
                   let num;
                   if (this.state.cartProductQuantity > 1)
                     num = this.state.cartProductQuantity - 1;
@@ -93,7 +98,9 @@ class Product extends Component {
                     cartProductQuantity: num
                   });
                 }}
-              />
+              >
+                <i class="fas fa-minus"></i>
+              </button>
               <input
                 type="range"
                 onChange={this.handleChange}
@@ -103,23 +110,30 @@ class Product extends Component {
                 max={this.state.product.quantity}
                 step={1}
               />
-              <input
+              <button
                 className="crements"
-                type="button"
-                value="+"
-                onClick={() => {
+                onClick={e => {
+                  e.preventDefault();
                   let num = this.state.cartProductQuantity + 1;
                   this.setState({
                     cartProductQuantity: num
                   });
                 }}
-              />
+              >
+                <i class="fas fa-plus"></i>
+              </button>
             </div>
-            <input
-              value={`Add ${this.state.cartProductQuantity} to Cart`}
-              className="shopProductCartButton"
+            <button
               type="submit"
-            />
+              className="shopProductButton shopProductCartButton"
+            >
+              <span className="shopProductButton-text">
+                Add {this.state.cartProductQuantity} to
+              </span>
+              <span className="shopProductButton-icon">
+                <i class="fas fa-shopping-cart"></i>
+              </span>
+            </button>
           </form>
         ];
       } else if (this.props.user.badge === "RETAILER") {

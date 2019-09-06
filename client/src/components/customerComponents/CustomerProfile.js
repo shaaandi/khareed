@@ -46,35 +46,39 @@ class CustomerProfile extends Component {
   };
 
   renderContent = () => {
-    return this.state.profileEditMode ? (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name :
-          <input
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          Address :
-          <input
-            type="text"
-            name="address"
-            value={this.state.address}
-            onChange={this.handleChange}
-          />
-        </label>
-        <button>Update</button>
-      </form>
-    ) : (
-      <div>
-        <li>Name : {this.props.profile.name}</li>
-        <li>Badge : {this.props.profile.badge}</li>
-        <li>Address : {this.props.profile.address || ""}</li>
-      </div>
-    );
+    return this.state.profileEditMode
+      ? [
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Name :
+              <input
+                type="text"
+                name="name"
+                value={this.state.name}
+                onChange={this.handleChange}
+              />
+            </label>
+            <label>
+              Address :
+              <input
+                type="text"
+                name="address"
+                value={this.state.address}
+                onChange={this.handleChange}
+              />
+            </label>
+            <button>Update</button>
+          </form>,
+          <button onClick={this.handleClick}>Back</button>
+        ]
+      : [
+          <div>
+            <li>Name : {this.props.profile.name}</li>
+            <li>Badge : {this.props.profile.badge}</li>
+            <li>Address : {this.props.profile.address || ""}</li>
+          </div>,
+          <button onClick={this.handleClick}>Edit Profile</button>
+        ];
   };
 
   render() {
@@ -83,12 +87,11 @@ class CustomerProfile extends Component {
     }
     return (
       <div className="retailerProfile">
-        <img
+        {/* <img
           src="https://static.thenounproject.com/png/9355-200.png"
           alt="Profile Image"
-        />
+        /> */}
         {this.renderContent()}
-        <button onClick={this.handleClick}>Edit Profile</button>
       </div>
     );
   }

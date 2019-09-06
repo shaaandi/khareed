@@ -4,6 +4,14 @@
   background: #9a9a9a;
 }
 
+#none {
+  display: none;
+}
+
+#flex {
+  display: flex;
+}
+
 #root {
   display: flex;
   flex-direction: column;
@@ -441,7 +449,7 @@
 
 .shopProductData .About .title {
   display: block;
-  font-weight: lighter;
+  font-weight: normal;
 }
 
 .shopProductData .About .from {
@@ -456,7 +464,6 @@
 
 .shopProductCartForm {
   display: flex;
-  align-items: flex-start;
   padding: 3px;
 }
 .shopProduct .setters {
@@ -481,7 +488,7 @@
 
 .similarProducts .products .similarProduct h3,
 h4 {
-  font-weight: lighter;
+  font-weight: normal;
 }
 
 .similarProduct img {

@@ -48,6 +48,14 @@
   margin: 2px;
 }
 
+.retailerProfile {
+  padding: 10px;
+}
+
+.retailerProfile li {
+  display: block;
+}
+
 @media only screen and (max-width: 900px) {
   #customerMobileDashboardNav {
     background: #009688;

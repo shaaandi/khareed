@@ -16,6 +16,12 @@ class CustomerCart extends Component {
     await this.props.fetchCustomerSection("cart");
   }
 
+  sliceStrings = (str, limit) => {
+    if (str.length > limit) {
+      return `${str.slice(0, limit)} ...`;
+    } else return str;
+  };
+
   render() {
     if (
       this.props.cart.products === null ||
@@ -51,8 +57,8 @@ class CustomerCart extends Component {
         <div key={p._id} className="cartProduct">
           <img className="cartImage" src={p.imgSrc} alt="Image of Product" />
           <div className="cartProductInformation">
-            <h3 className="cartText">{p.title}</h3>
-            <h4 className="cartText">Rs: {p.price}</h4>
+            <h3 className="cartText">{this.sliceStrings(p.title, 18)}</h3>
+            <h4 className="cartText"> ${p.price}</h4>
             {quant(p._id)}
             <Link to={`/shop/products/${p._id}`} className="cartText">
               View Product
@@ -72,7 +78,7 @@ class CustomerCart extends Component {
       <div className="cart">
         <div className="cartHeader">
           <h3>Cart</h3>
-          <h4>Total Amount : Rs {totalAmount}/_</h4>
+          <h4>Total Amount : ${totalAmount}/_</h4>
         </div>
         <div className="cartProducts">
           {Products}
