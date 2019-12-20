@@ -25,7 +25,9 @@ class NewProductForm extends Component {
       description: "",
       quantity: "",
       brand: "",
-      imgSrc: ""
+      imgSrc: "",
+      category : "",
+      subCategory : ""
     });
     this.props.history.push("/retailer/products");
   };
@@ -73,6 +75,14 @@ class NewProductForm extends Component {
         <label>
           <span>Brand</span>
           <input type="text" name="brand" onChange={this.handleChange} />
+        </label>
+        <label>
+          <span>Category</span>
+          <input type="text" name="category" onChange={this.handleChange} />
+        </label>
+        <label>
+          <span>Sub Category</span>
+          <input type="text" name="subCategory" onChange={this.handleChange} />
         </label>
         <button>Submit</button>
       </form>

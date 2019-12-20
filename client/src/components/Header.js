@@ -138,9 +138,9 @@ class Header extends Component {
                 Orders
               </Link>,
               <div className="toggleOptions-dropDownWrapper">
-                <Link to={`/customer`} className="toggleOptions-dropDownButton">
+                {/* <Link to={`/customer`} className="toggleOptions-dropDownButton">
                   <i class="fas fa-user"></i>
-                </Link>
+                </Link> */}
                 <div className="toggleOptions-dropDownContent">
                   <Link
                     to="/customer/profile"
@@ -251,6 +251,7 @@ class Header extends Component {
               src={require("../images/LogoNew.png")}
               alt="Khareed"
             />
+            {/* Place logo/name here */}
           </Link>
         </div>
         <button
