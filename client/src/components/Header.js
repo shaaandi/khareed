@@ -166,9 +166,9 @@ class Header extends Component {
                 Orders
               </Link>,
               <div className="toggleOptions-dropDownWrapper">
-                <Link to="/retailer" className="toggleOptions-dropDownButton">
+                {/* <Link to="/retailer" className="toggleOptions-dropDownButton">
                   <i class="fas fa-user"></i>
-                </Link>
+                </Link> */}
                 <div className="toggleOptions-dropDownContent">
                   <Link
                     to="/retailer/profile"
