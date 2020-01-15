@@ -17,7 +17,7 @@ module.exports = app => {
 
   app.get("/api/retailer", authVerification, async (req, res) => {
     if (!req.user) res.send(false);
-    let retailer = await Retailer.findById(req.user.id);
+    let retailer = await Retailer.findById(req.user.id).select('name initialized googleId badge address')
     res.send(retailer);
   });
 
@@ -84,7 +84,7 @@ module.exports = app => {
   });
 
   app.get("/api/retailer/orders", authVerification, async (req, res) => {
-    let retailer = await Retailer.findById(req.user.id).populate(
+    let retailer = await Retailer.findById(req.user.id).select('retailerOrders').populate(
       "retailerOrders"
     );
     res.send(retailer.retailerOrders);

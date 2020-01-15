@@ -20,7 +20,7 @@ passport.deserializeUser(async (cookieBucket, done) => {
         case 'CUSTOMER':
             return done(null, await Customer.findById(cookieBucket.id))
         case 'RETAILER':
-            return done(null, await Retailer.findById(cookieBucket.id))
+            return done(null, await Retailer.findById(cookieBucket.id).select('-inventory -retailerOrders'))
         case 'SERVICE':
             return done(null, await Service.findById(cookieBucket.id))
         default:
@@ -42,7 +42,7 @@ passport.use(new GoogleStrategy({
     let existingUser = await Customer.findOne({googleId : profile.id})
     if (existingUser) return done(null, existingUser)
     // or its Retailer
-    let existingUser2 = await Retailer.findOne({googleId : profile.id})
+    let existingUser2 = await Retailer.findOne({googleId : profile.id}).select('-inventory -retailerOrders')
     if (existingUser2) return done(null, existingUser2)
     // or its Service Man 
     let existingUser3 = await Service.findOne({googleId : profile.id});
